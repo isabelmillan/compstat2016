@@ -1,2 +1,7 @@
 # compstat2016
-Tutorial de Shiny Estadístsica computacional
+
+Github para las tareas de Estadística Computacional de la maestría en Ciencia de Datos ITAM
+
+Tarea 1: Método de la Función inversa
+
+Tarea 2: Integración numérica usando Monte Carlo
