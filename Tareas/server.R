@@ -119,7 +119,7 @@ shinyServer(function(input, output) {
 # Distribuciones a priori
   
   alphaDist <- reactive({
-    input$alpha
+    input$alph
   })
   
   betaDist <- reactive({

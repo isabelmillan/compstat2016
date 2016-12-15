@@ -21,6 +21,16 @@ sourceCpp("mcmc.cpp")
 # Define UI for application that draws a histogram
 shinyUI(fluidPage(title="Estadística Computacional",
                   tabsetPanel(
+                    tabPanel("Tareas estadística computacional",
+                             sidebarLayout(
+                               sidebarPanel(
+                                 h3("Ana Isabel Millán Careaga"),
+                                 h4("167268")
+                               ),
+                             
+                             mainPanel(
+                               h4("Este shiny incluye las tareas realizadas en el curso de estadística computacional en la maestría en Ciencia de datos ITAM")
+                             ))),
                     tabPanel("Método funcion inversa",
                              sidebarLayout(
                                sidebarPanel(
@@ -55,11 +65,8 @@ shinyUI(fluidPage(title="Estadística Computacional",
                                  sliderInput(inputId = "alpha", label="Escoge el nivel de confianza de intervalos que deseas", min= .001, max=.5, value=0.05)
                                ),
                                mainPanel(
-                                 plotOutput("graficamontecarlo"),
-                                 h6("El valor inferior del intervalo de confianza es "),
-                                 textOutput("bajo"),
-                                 h6("El valor superior del intervalo de confianza es"),
-                                 textOutput("alto")
+                                 plotOutput("graficamontecarlo")
+    
                                  
                                )
                              )
@@ -80,7 +87,7 @@ shinyUI(fluidPage(title="Estadística Computacional",
                                  
                                  column(10, plotlyOutput(outputId = "scatterplot")),
                                  
-                                 column(4, selectInput("alpha", "Seleciona la distribución a priori para alpha:", c("normal","gamma","uniform"))),
+                                 column(4, selectInput("alph", "Seleciona la distribución a priori para alpha:", c("normal","gamma","uniform"))),
                                  column(4, selectInput("beta", "Seleciona la distribución a priori para beta:", c("normal","gamma","uniform"))),
                                  column(4, selectInput("sigma", "Seleciona la distribución a priori para sigma:", c("normal","gamma","uniform"))),
                                  
