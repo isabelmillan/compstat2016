@@ -12,7 +12,7 @@ library(ggplot2)
 
 # Define server logic required to draw a histogram
 shinyServer(function(input, output) {
-   
+  
   
   set.seed(20160817)
   output$hist1<-renderPlot({
@@ -44,42 +44,36 @@ shinyServer(function(input, output) {
   })
   
   
-   
+  
   output$graficamontecarlo<- renderPlot({   
-   nsim<-input$nsim2
-   nmin<-input$nmin
-   nmax<-input$nmax
-   a<-input$a
-   b<-input$b
-   alpha<-input$alpha
-   
-   mc<-replicate(nsim,{
-     n<-floor(runif(1,nmin,nmax))
-     densx<-runif(n,min=a,max=b)
-     phix<-sapply(densx,phi())
-     estim<-mean(phix)
-     intervalo<-estim + c(-1,1)*qnorm(1-alpha/2)*sqrt(var(phix)/n)
-     (c(n,estim,intervalo[1],intervalo[2]))
-
-   })
-   mc<-as.data.frame(t(mc))
-   names(mc)<-c("Nsimulaciones", "Estimacion", "intervaloinf","intervalosup")
-   mc
+    nsim<-input$nsim2
+    nmin<-input$nmin
+    nmax<-input$nmax
+    a<-input$a
+    b<-input$b
+    alpha<-input$alpha
     
-   graf<- ggplot(mc, aes(x=Nsimulaciones,y=Estimacion)) + 
-     ggtitle(paste("Estimación Montecarlo con",(1-alpha)*100,"% de confianza", sep="")) +
-     geom_line(aes(y = Estimacion), colour = "red") +
-     geom_ribbon(aes(ymin = intervaloinf, ymax= intervalosup),alpha=0.2)
-   
-     graf 
+    mc<-replicate(nsim,{
+      n<-floor(runif(1,nmin,nmax))
+      densx<-runif(n,min=a,max=b)
+      phix<-sapply(densx,phi())
+      estim<-mean(phix)
+      intervalo<-estim + c(-1,1)*qnorm(1-alpha/2)*sqrt(var(phix)/n)
+      (c(n,estim,intervalo[1],intervalo[2]))
+      
+    })
+    mc<-as.data.frame(t(mc))
+    names(mc)<-c("Nsimulaciones", "Estimacion", "intervaloinf","intervalosup")
+    mc
+    
+    graf<- ggplot(mc, aes(x=Nsimulaciones,y=Estimacion)) + 
+      ggtitle(paste("Estimación Montecarlo con",(1-alpha)*100,"% de confianza", sep="")) +
+      geom_line(aes(y = Estimacion), colour = "red") +
+      geom_ribbon(aes(ymin = intervaloinf, ymax= intervalosup),alpha=0.2)
+    
+    graf 
+    
+  })
   
- })
- 
-    
+  
 })
-  
- 
-
-  
-  
- 

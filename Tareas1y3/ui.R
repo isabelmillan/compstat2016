@@ -9,6 +9,14 @@
 
 library(shiny)
 library(ggplot2)
+library(MASS)
+library(DT)
+library(Rcpp)
+library(plotly)
+library(RcppArmadillo)
+library(dplyr)
+
+sourceCpp("mcmc.cpp")
 
 # Define UI for application that draws a histogram
 shinyUI(fluidPage(title="Estadística Computacional",
@@ -32,26 +40,9 @@ shinyUI(fluidPage(title="Estadística Computacional",
                                )
                              )  
                     ),
-                    tabPanel("Método aceptacion rechazo",
-                             sidebarLayout(
-                               sidebarPanel(
-                                 h5("Este programa simula la distribucion de la funcion beta por el metodo de aceptacion-rechazo"),
-                                 numericInput(inputId="numacept",label="Escoge el numero de simulaciones",
-                                              value=1000, min=0, max=10000000),
-                                 numericInput(inputId="alfa", label="Escoge el parametro alfa de la funcion beta",
-                                              value=2.7,min=0,max=1000,step=.1),
-                                 numericInput(inputId="beta",label="Escoge el parametro beta de la distribucion beta",
-                                              value=6.3,min=0,max=1000,step=.1)
-                               ),
-                               mainPanel("hola"
-                                         # plotlyOutput("hist3"),
-                                         #b("hist4")
-                                         
-                               )
-                               
-                             )
-                    ),
+                    
                     tabPanel("Método Montecarlo",
+                    
                              sidebarLayout(
                                sidebarPanel(
                                  h5("Este programa resuelve cualquier integral definida usando simulación de uniformes y Montecarlo"),
@@ -72,9 +63,56 @@ shinyUI(fluidPage(title="Estadística Computacional",
                                  
                                )
                              )
+                        
                              
+                    ),
+                    tabPanel("MCMC",
+                             sidebarLayout(
+                               sidebarPanel(
+                                 h5("Este programa realiza MCMC para el MASS Boston data set")),
+                               mainPanel(column(4, selectInput("vardep", "Selecciona la variable dependiente",
+                                                       c(names(MASS::Boston)), selected = 'length')),
+                                 column(4, selectInput("varindep", "Selecciona la variable independiente",
+                                                       c(names(MASS::Boston)), selected = 'budget')),
+                                 
+                                 fluidRow(
+                                   DT::dataTableOutput("table")),
+                                 
+                                 column(10, plotlyOutput(outputId = "scatterplot")),
+                                 
+                                 column(4, selectInput("alpha", "Seleciona la distribución a priori para alpha:", c("normal","gamma","uniform"))),
+                                 column(4, selectInput("beta", "Seleciona la distribución a priori para beta:", c("normal","gamma","uniform"))),
+                                 column(4, selectInput("sigma", "Seleciona la distribución a priori para sigma:", c("normal","gamma","uniform"))),
+                                 
+                                 column(4, plotlyOutput(outputId = "alphaPlot")),
+                                 column(4, plotlyOutput(outputId = "betaPlot")),
+                                 column(4, plotlyOutput(outputId = "sigmaPlot")),
+                                 
+                                 column(5, sliderInput(inputId = "longitud", value = 100, label = "Selecciona la longitud de las cadenas", max = 10000, min = 100, step = 1)),
+                                 column(5, sliderInput(inputId = "ncadenas", value = 2, label = "Selecciona el número de cadenas", max = 1000, min = 2, step = 1)),
+                                 column(10, actionButton("go", "Calcula")),
+                                 
+                                 column(4, plotlyOutput((outputId = "cadena_alpha"))),
+                                 column(4, plotlyOutput((outputId = "cadena_beta"))),
+                                 column(4, plotlyOutput((outputId = "cadena_sigma"))),
+                                 
+                                 column(4, plotlyOutput((outputId = "alpha_postplot"))),
+                                 column(4, plotlyOutput((outputId = "beta_postplot"))),
+                                 column(4, plotlyOutput((outputId = "sigma_postplot"))),
+                                 
+                                 column(4, plotlyOutput((outputId = "comp_alpha"))),
+                                 column(4, plotlyOutput((outputId = "comp_beta"))),
+                                 column(4, plotlyOutput((outputId = "comp_sigma")))
+                               )
+                               )
+                             )
                     )
-                  ))   
-        
+                  )
 )
-
+                             
+                    
+                    
+                    
+                    
+          
+        
